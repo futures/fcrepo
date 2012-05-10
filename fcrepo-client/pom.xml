@@ -13,14 +13,7 @@
   <name>All Fedora Clients</name>
 
   <dependencies>
-  	<dependency>
-  		<groupId>org.fcrepo</groupId>
-  		<artifactId>trippi-core</artifactId>
-  		<version>1.5.4</version>
-  		<type>pom</type>
-  		<scope>compile</scope>
-  	</dependency>
-  </dependencies>
+   </dependencies>
   <modules>
     <module>fcrepo-client-admin</module>
     <module>fcrepo-client-messaging</module>
