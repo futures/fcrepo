@@ -275,6 +275,42 @@ public abstract class TestXMLDODeserializer
         assertTrue(content.contains("http"));
     }
 
+    @Test
+    public void testDeserializeWithAutoChecksum() throws Exception {
+        DigitalObject obj = createTestObject(FEDORA_OBJECT_3_0);
+        InputStream in = getStream(obj);
+        obj.setNew(true);
+        Datastream.defaultChecksumType = "MD5";
+        Datastream.autoChecksum = true;
+        m_deserializer.deserialize(in, obj, "UTF-8", DESERIALIZE_INSTANCE);
+
+        for (Iterator<String> streams = obj.datastreamIdIterator(); streams.hasNext(); ) {
+            String id = streams.next();
+            for (Datastream version : obj.datastreams(id)) {
+                assertEquals(Datastream.getDefaultChecksumType(), version.DSChecksumType);
+                assertEquals(32, version.getChecksum().length());
+            }
+        }
+    }
+
+    @Test
+    public void testDeserializeWithoutAutoChecksum() throws Exception {
+        DigitalObject obj = createTestObject(FEDORA_OBJECT_3_0);
+        InputStream in = getStream(obj);
+        obj.setNew(true);
+        Datastream.defaultChecksumType = "DISABLED";
+        Datastream.autoChecksum = false;
+        m_deserializer.deserialize(in, obj, "UTF-8", DESERIALIZE_INSTANCE);
+
+        for (Iterator<String> streams = obj.datastreamIdIterator(); streams.hasNext(); ){
+            String id = streams.next();
+            for (Datastream version : obj.datastreams(id)) {
+                assertEquals(Datastream.CHECKSUMTYPE_DISABLED, version.DSChecksumType);
+                assertEquals(Datastream.CHECKSUM_NONE, version.getChecksum());
+            }
+        }
+    }
+ 
     /**
      * Copies of an object by deserializing and re-serializing. In theory, there
      * should be no difference between copy generations..

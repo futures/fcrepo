@@ -909,6 +909,9 @@ public class METSFedoraExtDODeserializer
     }
 
     private void instantiateDatastream(Datastream ds) throws SAXException {
+        logger.debug("instantiate datastream: dsid = " + m_dsId
+                + "checksumType = " + m_dsChecksumType + "checksum = "
+                + m_dsChecksum);
 
         // set datastream variables with values grabbed from the SAX parse
         ds.DatastreamID = m_dsId;
@@ -925,10 +928,16 @@ public class METSFedoraExtDODeserializer
         ds.DSLocationType = m_dsLocationType;
         ds.DSInfoType = m_dsInfoType;
 
-        ds.DSChecksumType = m_dsChecksumType;
-        logger.debug("instantiate datastream: dsid = " + m_dsId
-                + "checksumType = " + m_dsChecksumType + "checksum = "
-                + m_dsChecksum);
+        if (m_dsChecksumType == null || m_dsChecksumType.equals("")) {
+            if (Datastream.autoChecksum) {
+                ds.DSChecksumType = Datastream.getDefaultChecksumType();
+            } else {
+                ds.DSChecksumType = Datastream.CHECKSUMTYPE_DISABLED;
+            }
+        } else {
+            ds.DSChecksumType = m_dsChecksumType;
+        }
+
         if (m_obj.isNew()) {
             if (m_dsChecksum != null && !m_dsChecksum.equals("")
                     && !m_dsChecksum.equals(Datastream.CHECKSUM_NONE)) {
