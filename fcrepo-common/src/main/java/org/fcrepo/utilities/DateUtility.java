@@ -24,9 +24,9 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public abstract class DateUtility {
 
-	private static final Date ONE_BCE = new Date(-62167392000000L);
+	private static final Date ONE_BCE = new Date(-62198755200000L);
 
-	private static final Date ONE_CE = new Date(-62135769600000L);
+	private static final Date ONE_CE = new Date(-62135596800000L);
 
 	private static final DateTimeFormatter FORMATTER_MILLISECONDS_T_Z = DateTimeFormat
 			.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
